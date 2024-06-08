@@ -291,3 +291,14 @@ def is_custom_field(field_name: str):
         return first_word[0] == '*'
     else:
         return False
+
+
+def get_col_num_of(value: str, sheet: worksheet, row: int):
+    last_col = get_last_column(sheet=sheet, row=row)
+    if last_col:  # if not None
+        for col in range(1, last_col + 1):
+            if sheet.cell(row=row, column=col).value == value:
+                return col
+        return None
+    else:
+        return None

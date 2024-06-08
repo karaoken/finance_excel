@@ -38,11 +38,13 @@ try:
     summarized_wb = load_workbook(path + "\\" + STOCK + "_conso.xlsx", data_only=True)
 except Exception as e:
     print("sum file not found")
-else:   # if exist, store custom fields to list.
+    summarized_wb = False
+else:   # if custom field exist, store custom fields to list.
     custom_fields = []
     sum_sheet = summarized_wb["PL_conso"]
     sum_last_row = get_last_row(sheet=sum_sheet, col=1)
     sum_last_col = get_last_column(sheet=sum_sheet, row=1)
+    first_custom_period = sum_sheet['B1'].value
     for row in range(1, sum_last_row + 1):
         if is_custom_field(sum_sheet.cell(row=row, column=1).value):    # if cell value is custom field
             custom_field = []
@@ -187,7 +189,18 @@ if conso_available:
     insert_list_to_excel_range(row=last_row + 1, sheet=pl_conso_sheet, items=total_debt, title=TOTAL_DEBT,
                                num_format=NUMBER)
 
-    conso_wb.save(path + "\\" + "conso.xlsx")
+    last_row = get_last_row(sheet=pl_conso_sheet, col=1)
+    if summarized_wb:   # if summarized_wb exist
+        # re-store custom fields
+        for field in custom_fields:
+            last_row += 1
+            pl_conso_sheet.cell(row=last_row, column=1).value = field[0]
+            first_custom_column = get_col_num_of(sheet=pl_conso_sheet,row=1,value=first_custom_period)
+            for num, value in enumerate(field[1:]):
+                pl_conso_sheet.cell(row=last_row, column=first_custom_column + num).value = value
+
+
+    conso_wb.save(path + "\\" + STOCK + "_conso.xlsx")
 
 if company_available:
     for sheet in company_sheets:
@@ -284,7 +297,7 @@ if company_available:
     insert_list_to_excel_range(row=last_row + 1, sheet=pl_comp_sheet, items=total_debt, title=TOTAL_DEBT,
                                num_format=NUMBER)
 
-    comp_wb.save(path + "\\" + "company.xlsx")
+    comp_wb.save(path + "\\" + STOCK + "_company.xlsx")
 
 # conso_oper_rev = get_fin_items(pl_conso_sheet, OPER_REV)
 # add_fin_item(items=conso_oper_rev, sheet=pl_conso_sheet, row_to_insert=COST, position="lower", num_format=NUMBER,
