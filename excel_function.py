@@ -197,7 +197,7 @@ def get_fin_items(sheet: worksheet, item_title) -> list:
     last_col = get_last_column(sheet, 1)
     last_row = get_last_row(sheet, 1)
     for row in range(1, last_row + 1):
-        if sheet.cell(row=row, column=1).value == item_title:       # Found title
+        if sheet.cell(row=row, column=1).value == item_title:  # Found title
             for col in range(2, last_col + 1):
                 result.append(sheet.cell(row=row, column=col).value)
             return result
@@ -210,7 +210,7 @@ def insert_list_to_excel_range(row, items: list, title, sheet: worksheet, num_fo
     sheet.insert_rows(row)
     sheet.cell(row=row, column=1).value = title
 
-    if not items:   # if item is None or empty
+    if not items:  # if item is None or empty
         print(f"Can not assign items to worksheet: {title}")
         return
 
@@ -242,10 +242,10 @@ def list_operation(input1: list, input2: list, operation) -> list:
     # if len(input1) != len(input2):
     #     print("inputs length are not match")
     #     return result
-    if (not input1) or (not input2):    # if one of them is empty or None
-        if input1:      # if input1 is not empty or None.
+    if (not input1) or (not input2):  # if one of them is empty or None
+        if input1:  # if input1 is not empty or None.
             return input1
-        elif input2:    # if input1 is not empty or None.
+        elif input2:  # if input1 is not empty or None.
             return input2
     # elif not input1:    # if empty or None
     #     input1 = [0 for _ in input2]
@@ -282,3 +282,12 @@ def list_operation(input1: list, input2: list, operation) -> list:
             else:
                 result.append(m / n)
         return result
+
+
+def is_custom_field(field_name: str):
+    split_field_name = field_name.split()
+    if split_field_name:  # if field_name is not empty
+        first_word = split_field_name[0]
+        return first_word[0] == '*'
+    else:
+        return False

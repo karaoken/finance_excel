@@ -33,6 +33,23 @@ for file in files:
         elif get_statement(inspecting_ws) == "cf" and get_type(inspecting_ws) == "Consolidate":  # cf_company
             src_cf_conso_ws = inspecting_wb["Sheet1"]
 
+# check whether summarized file exist?
+try:
+    summarized_wb = load_workbook(path + "\\" + STOCK + "_conso.xlsx", data_only=True)
+except Exception as e:
+    print("sum file not found")
+else:   # if exist, store custom fields to list.
+    custom_fields = []
+    sum_sheet = summarized_wb["PL_conso"]
+    sum_last_row = get_last_row(sheet=sum_sheet, col=1)
+    sum_last_col = get_last_column(sheet=sum_sheet, row=1)
+    for row in range(1, sum_last_row + 1):
+        if is_custom_field(sum_sheet.cell(row=row, column=1).value):    # if cell value is custom field
+            custom_field = []
+            for col in range(1, sum_last_col + 1):
+                custom_field.append(sum_sheet.cell(row=row, column=col).value)
+            custom_fields.append(custom_field)
+
 # if not error, create new Excel file for company financial statement
 try:
     print(src_pl_comp_ws['B3'].value)
