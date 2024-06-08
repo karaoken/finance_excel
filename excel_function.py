@@ -302,3 +302,37 @@ def get_col_num_of(value: str, sheet: worksheet, row: int):
         return None
     else:
         return None
+
+
+def get_row_num_of(value: str, sheet: worksheet, col: int):
+    last_row = get_last_row(sheet=sheet, col=col)
+    if last_row:  # if not None
+        for row in range(1, last_row + 1):
+            if sheet.cell(row=row, column=col).value == value:
+                return row
+        return None
+    else:
+        return None
+
+
+def back_up_comments(sheet: worksheet):
+    last_row = get_last_row(sheet=sheet, col=1)
+    last_col = get_last_column(sheet=sheet, row=1)
+
+    comments = {}
+    for row in range(1, last_row + 1):
+        for col in range(1, last_col + 1):
+            comment = sheet.cell(row=row, column=col).comment
+            if comment is not None:
+                x = sheet.cell(row=1, column=col).value
+                y = sheet.cell(row=row, column=1).value
+                comments[(x, y)] = comment
+    print(comments)
+    return comments
+
+
+def restore_comments(comments: dict, sheet: worksheet):
+    for key in comments:
+        col = get_col_num_of(value=key[0], sheet=sheet, row=1)
+        row = get_row_num_of(value=key[1], sheet=sheet, col=1)
+        sheet.cell(row=row, column=col).comment = comments[key]
