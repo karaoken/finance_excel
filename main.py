@@ -4,11 +4,11 @@ import os
 
 from financial_title import *
 from excel_function import *
+from file_path import *
 
 company_available = False
 conso_available = False
 
-path = 'D:\\OneDrive\\Investment\\Stock\\Stock Data\\DITTO\\SETSmartFiles'
 files = os.listdir(path)
 
 for file in files:
@@ -37,7 +37,7 @@ for file in files:
 try:
     print(src_pl_comp_ws['B3'].value)
 except NameError:
-    print("No Compapny found")
+    print("No Company found")
 else:
     company_available = True
     comp_wb = Workbook()
@@ -48,7 +48,7 @@ else:
     copy_worksheet(src_bs_comp_ws, bs_comp_sheet)
     copy_worksheet(src_cf_comp_ws, cf_comp_sheet)
     comp_wb.remove(comp_wb["Sheet"])
-    comp_wb.save("company_statement.xlsx")
+    # comp_wb.save("company_statement.xlsx")
 
 # if not error, create new Excel file for consolidated financial statement
 try:
@@ -65,7 +65,7 @@ else:
     copy_worksheet(src_bs_conso_ws, bs_conso_sheet)
     copy_worksheet(src_cf_conso_ws, cf_conso_sheet)
     conso_wb.remove(conso_wb["Sheet"])
-    conso_wb.save("conso_statement.xlsx")
+    # conso_wb.save("conso_statement.xlsx")
 
 conso_sheets = []
 company_sheets = []
