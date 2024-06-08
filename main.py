@@ -42,6 +42,7 @@ except Exception as e:
 else:   # if custom field exist, store custom fields to list.
     custom_fields = []
     sum_sheet = summarized_wb["PL_conso"]
+    backup_comments = back_up_comments(sheet=sum_sheet)
     sum_last_row = get_last_row(sheet=sum_sheet, col=1)
     sum_last_col = get_last_column(sheet=sum_sheet, row=1)
     first_custom_period = sum_sheet['B1'].value
@@ -51,6 +52,9 @@ else:   # if custom field exist, store custom fields to list.
             for col in range(1, sum_last_col + 1):
                 custom_field.append(sum_sheet.cell(row=row, column=col).value)
             custom_fields.append(custom_field)
+
+    # save summarized to different name to back-up
+    summarized_wb.save(path + "\\" + STOCK + "conso_backup.xlsx")
 
 # if not error, create new Excel file for company financial statement
 try:
@@ -199,6 +203,7 @@ if conso_available:
             for num, value in enumerate(field[1:]):
                 pl_conso_sheet.cell(row=last_row, column=first_custom_column + num).value = value
 
+        restore_comments(comments=backup_comments, sheet=pl_conso_sheet)
 
     conso_wb.save(path + "\\" + STOCK + "_conso.xlsx")
 
