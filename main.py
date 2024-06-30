@@ -9,6 +9,8 @@ from file_path import *
 company_available = False
 conso_available = False
 
+STOCK = input("Please enter stock name\n").upper()
+path = path + STOCK + "\\SETSmartFiles"
 files = os.listdir(path)
 
 for file in files:
