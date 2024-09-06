@@ -19,6 +19,8 @@ SELLING_EXP_TO_SALES = "      % Selling Expenses"
 DEPRECIATION = "    Depreciation And Amortisation"
 ADMIN_EXP = "      Administrative Expenses"
 ADMIN_EXP_TO_SALES = "      % Admin Expenses"
+EQUITY = "    Total Equity"
+IBD_E = "    IBD/E"
 
 TOTAL_DEBT = "    Total Debt"
 SHORT_DEBT = "    Bank Overdrafts And Short-Term Borrowings From Financial Institutions"

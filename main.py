@@ -41,7 +41,7 @@ try:
 except Exception as e:
     print("sum file not found")
     summarized_wb = False
-else:   # if custom field exist, store custom fields to list.
+else:  # if custom field exist, store custom fields to list.
     custom_fields = []
     sum_sheet = summarized_wb["PL_conso"]
     backup_comments = back_up_comments(sheet=sum_sheet)
@@ -49,7 +49,7 @@ else:   # if custom field exist, store custom fields to list.
     sum_last_col = get_last_column(sheet=sum_sheet, row=1)
     first_custom_period = sum_sheet['B1'].value
     for row in range(1, sum_last_row + 1):
-        if is_custom_field(sum_sheet.cell(row=row, column=1).value):    # if cell value is custom field
+        if is_custom_field(sum_sheet.cell(row=row, column=1).value):  # if cell value is custom field
             custom_field = []
             for col in range(1, sum_last_col + 1):
                 custom_field.append(sum_sheet.cell(row=row, column=col).value)
@@ -139,10 +139,11 @@ if conso_available:
     ebit = get_fin_items(pl_conso_sheet, EBIT)
     fin_cost = get_fin_items(pl_conso_sheet, FIN_COST)
     tax_exp = get_fin_items(pl_conso_sheet, TAX_EXP)
-    short_debt = get_fin_items(bs_conso_sheet, SHORT_DEBT)   # Bank over draft
-    short_borrowing = get_fin_items(bs_conso_sheet, SHORT_BORROWING)     # Short term borrowings
-    long_debt_current = get_fin_items(bs_conso_sheet, LONG_DEBT_CURRENT)     # current portion of long term debt
+    short_debt = get_fin_items(bs_conso_sheet, SHORT_DEBT)  # Bank over draft
+    short_borrowing = get_fin_items(bs_conso_sheet, SHORT_BORROWING)  # Short term borrowings
+    long_debt_current = get_fin_items(bs_conso_sheet, LONG_DEBT_CURRENT)  # current portion of long term debt
     long_debt = get_fin_items(bs_conso_sheet, LONG_DEBT)
+    equity = get_fin_items(bs_conso_sheet, EQUITY)
 
     # Calculate financial ratio from list of item
     total_short_debt = list_operation(short_debt, short_borrowing, "ADD")
@@ -157,6 +158,7 @@ if conso_available:
     ebitda = list_operation(ebit, depreciation, "ADD")
     ebitda_to_sales = list_operation(ebitda, oper_rev, "DIVIDE")
     npm = list_operation(net_profit, oper_rev, "DIVIDE")
+    ibd_e = list_operation(total_debt, equity, operation="DIVIDE")
 
     # npm     # below net profit
     np_row = find_row_of(NET_PROFIT, pl_conso_sheet)
@@ -164,15 +166,18 @@ if conso_available:
 
     # EBITDA
     ebit_row = find_row_of(EBIT, pl_conso_sheet)
-    insert_list_to_excel_range(row=ebit_row, sheet=pl_conso_sheet, items=ebitda, title=EBITDA, num_format=NUMBER)  # upper EBIT
+    insert_list_to_excel_range(row=ebit_row, sheet=pl_conso_sheet, items=ebitda, title=EBITDA,
+                               num_format=NUMBER)  # upper EBIT
 
     # %EBITDA @ lower EBITDA
     ebitda_row = find_row_of(EBITDA, pl_conso_sheet)
-    insert_list_to_excel_range(row=ebitda_row + 1, sheet=pl_conso_sheet, items=ebitda_to_sales, title=EBITDA_MARGIN, num_format=PERCENT_FORMAT)
+    insert_list_to_excel_range(row=ebitda_row + 1, sheet=pl_conso_sheet, items=ebitda_to_sales, title=EBITDA_MARGIN,
+                               num_format=PERCENT_FORMAT)
 
     # % admin expense to sales @ below admin
     admin_exp_row = find_row_of(ADMIN_EXP, pl_conso_sheet)
-    insert_list_to_excel_range(row=admin_exp_row + 1, sheet=pl_conso_sheet, items=admin_exp_to_sales, title=ADMIN_EXP_TO_SALES, num_format=PERCENT_FORMAT)
+    insert_list_to_excel_range(row=admin_exp_row + 1, sheet=pl_conso_sheet, items=admin_exp_to_sales,
+                               title=ADMIN_EXP_TO_SALES, num_format=PERCENT_FORMAT)
 
     # % selling expense @ below selling
     selling_row = find_row_of(SELLING_EXP, pl_conso_sheet)
@@ -199,13 +204,24 @@ if conso_available:
     insert_list_to_excel_range(row=last_row + 1, sheet=pl_conso_sheet, items=total_debt, title=TOTAL_DEBT,
                                num_format=NUMBER)
 
+    # Equity
     last_row = get_last_row(sheet=pl_conso_sheet, col=1)
-    if summarized_wb:   # if summarized_wb exist
+    insert_list_to_excel_range(row=last_row + 1, sheet=pl_conso_sheet, items=equity, title=EQUITY,
+                               num_format=NUMBER)
+
+    # IBD/E
+    last_row = get_last_row(sheet=pl_conso_sheet, col=1)
+    insert_list_to_excel_range(row=last_row + 1, sheet=pl_conso_sheet, items=ibd_e, title=IBD_E,
+                               num_format=NUMBER)
+
+
+    last_row = get_last_row(sheet=pl_conso_sheet, col=1)
+    if summarized_wb:  # if summarized_wb exist
         # re-store custom fields
         for field in custom_fields:
             last_row += 1
             pl_conso_sheet.cell(row=last_row, column=1).value = field[0]
-            first_custom_column = get_col_num_of(sheet=pl_conso_sheet,row=1,value=first_custom_period)
+            first_custom_column = get_col_num_of(sheet=pl_conso_sheet, row=1, value=first_custom_period)
             for num, value in enumerate(field[1:]):
                 pl_conso_sheet.cell(row=last_row, column=first_custom_column + num).value = value
 
@@ -248,10 +264,11 @@ if company_available:
     ebit = get_fin_items(pl_comp_sheet, EBIT)
     fin_cost = get_fin_items(pl_comp_sheet, FIN_COST)
     tax_exp = get_fin_items(pl_comp_sheet, TAX_EXP)
-    short_debt = get_fin_items(bs_comp_sheet, SHORT_DEBT)   # Bank over draft
-    short_borrowing = get_fin_items(bs_comp_sheet, SHORT_BORROWING)     # Short term borrowings
-    long_debt_current = get_fin_items(bs_comp_sheet, LONG_DEBT_CURRENT)     # current portion of long term debt
+    short_debt = get_fin_items(bs_comp_sheet, SHORT_DEBT)  # Bank over draft
+    short_borrowing = get_fin_items(bs_comp_sheet, SHORT_BORROWING)  # Short term borrowings
+    long_debt_current = get_fin_items(bs_comp_sheet, LONG_DEBT_CURRENT)  # current portion of long term debt
     long_debt = get_fin_items(bs_comp_sheet, LONG_DEBT)
+    equity = get_fin_items(bs_comp_sheet, EQUITY)
 
     # Calculate financial ratio from list of item
     total_short_debt = list_operation(short_debt, short_borrowing, "ADD")
@@ -266,6 +283,7 @@ if company_available:
     ebitda = list_operation(ebit, depreciation, "ADD")
     ebitda_to_sales = list_operation(ebitda, oper_rev, "DIVIDE")
     npm = list_operation(net_profit, oper_rev, "DIVIDE")
+    ibd_e = list_operation(total_debt, equity, operation="DIVIDE")
 
     # npm     # below net profit
     np_row = find_row_of(NET_PROFIT, pl_comp_sheet)
@@ -310,6 +328,16 @@ if company_available:
     # Total debt @last row
     last_row = get_last_row(sheet=pl_comp_sheet, col=1)
     insert_list_to_excel_range(row=last_row + 1, sheet=pl_comp_sheet, items=total_debt, title=TOTAL_DEBT,
+                               num_format=NUMBER)
+
+    # Equity
+    last_row = get_last_row(sheet=pl_comp_sheet, col=1)
+    insert_list_to_excel_range(row=last_row + 1, sheet=pl_comp_sheet, items=equity, title=EQUITY,
+                               num_format=NUMBER)
+
+    # IBD/E
+    last_row = get_last_row(sheet=pl_comp_sheet, col=1)
+    insert_list_to_excel_range(row=last_row + 1, sheet=pl_comp_sheet, items=ibd_e, title=IBD_E,
                                num_format=NUMBER)
 
     comp_wb.save(path + "\\" + STOCK + "_company.xlsx")
