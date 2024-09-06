@@ -104,7 +104,9 @@ if conso_available:
     conso_sheets.append(bs_conso_sheet)
     conso_sheets.append(cf_conso_sheet)
 
+# for Consolidate sheet
 if conso_available:
+    # Organize sheet format
     for sheet in conso_sheets:
         # delete last 5 rows
         delete_last_5_rows(sheet)
@@ -124,8 +126,8 @@ if conso_available:
     # change cf from accumulate to quarter
     cf_accumulate_to_quarter(cf_conso_sheet)
 
+    # Get list item from financial sheets
     depreciation = get_fin_items(cf_conso_sheet, DEPRECIATION)
-
     oper_rev = get_fin_items(pl_conso_sheet, OPER_REV)
     cost = get_fin_items(pl_conso_sheet, COST)
     sga = get_fin_items(pl_conso_sheet, SGA)
@@ -142,6 +144,7 @@ if conso_available:
     long_debt_current = get_fin_items(bs_conso_sheet, LONG_DEBT_CURRENT)     # current portion of long term debt
     long_debt = get_fin_items(bs_conso_sheet, LONG_DEBT)
 
+    # Calculate financial ratio from list of item
     total_short_debt = list_operation(short_debt, short_borrowing, "ADD")
     total_long_debt = list_operation(long_debt, long_debt_current, "ADD")
     total_debt = list_operation(total_short_debt, total_long_debt, "ADD")
@@ -191,6 +194,7 @@ if conso_available:
     insert_list_to_excel_range(row=sga_row, sheet=pl_conso_sheet, items=gross_profit, title=GROSS_PROFIT,
                                num_format=NUMBER)
 
+    # Total debt @last row
     last_row = get_last_row(sheet=pl_conso_sheet, col=1)
     insert_list_to_excel_range(row=last_row + 1, sheet=pl_conso_sheet, items=total_debt, title=TOTAL_DEBT,
                                num_format=NUMBER)
@@ -209,7 +213,9 @@ if conso_available:
 
     conso_wb.save(path + "\\" + STOCK + "_conso.xlsx")
 
+# for company sheet
 if company_available:
+    # Organize sheet format
     for sheet in company_sheets:
         # delete last 5 rows
         delete_last_5_rows(sheet)
@@ -229,8 +235,8 @@ if company_available:
     # change cf from accumulate to quarter
     cf_accumulate_to_quarter(cf_comp_sheet)
 
+    # Get list item from financial sheets
     depreciation = get_fin_items(cf_comp_sheet, DEPRECIATION)
-
     oper_rev = get_fin_items(pl_comp_sheet, OPER_REV)
     cost = get_fin_items(pl_comp_sheet, COST)
     sga = get_fin_items(pl_comp_sheet, SGA)
@@ -247,6 +253,7 @@ if company_available:
     long_debt_current = get_fin_items(bs_comp_sheet, LONG_DEBT_CURRENT)     # current portion of long term debt
     long_debt = get_fin_items(bs_comp_sheet, LONG_DEBT)
 
+    # Calculate financial ratio from list of item
     total_short_debt = list_operation(short_debt, short_borrowing, "ADD")
     total_long_debt = list_operation(long_debt, long_debt_current, "ADD")
     total_debt = list_operation(total_short_debt, total_long_debt, "ADD")
@@ -300,6 +307,7 @@ if company_available:
     insert_list_to_excel_range(row=sga_row, sheet=pl_comp_sheet, items=gross_profit, title=GROSS_PROFIT,
                                num_format=NUMBER)
 
+    # Total debt @last row
     last_row = get_last_row(sheet=pl_comp_sheet, col=1)
     insert_list_to_excel_range(row=last_row + 1, sheet=pl_comp_sheet, items=total_debt, title=TOTAL_DEBT,
                                num_format=NUMBER)
