@@ -159,6 +159,8 @@ if conso_available:
     ebitda_to_sales = list_operation(ebitda, oper_rev, "DIVIDE")
     npm = list_operation(net_profit, oper_rev, "DIVIDE")
     ibd_e = list_operation(total_debt, equity, operation="DIVIDE")
+    earning_ttm = calculate_ttm(net_profit)
+    roe = list_operation(earning_ttm, equity[:len(earning_ttm)], operation="DIVIDE")
 
     # npm     # below net profit
     np_row = find_row_of(NET_PROFIT, pl_conso_sheet)
@@ -214,6 +216,10 @@ if conso_available:
     insert_list_to_excel_range(row=last_row + 1, sheet=pl_conso_sheet, items=ibd_e, title=IBD_E,
                                num_format=NUMBER)
 
+    # ROE
+    last_row = get_last_row(sheet=pl_conso_sheet, col=1)
+    insert_list_to_excel_range(row=last_row + 1, sheet=pl_conso_sheet, items=roe, title=ROE,
+                               num_format=PERCENT_FORMAT)
 
     last_row = get_last_row(sheet=pl_conso_sheet, col=1)
     if summarized_wb:  # if summarized_wb exist

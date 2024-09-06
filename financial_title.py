@@ -21,6 +21,7 @@ ADMIN_EXP = "      Administrative Expenses"
 ADMIN_EXP_TO_SALES = "      % Admin Expenses"
 EQUITY = "    Total Equity"
 IBD_E = "    IBD/E"
+ROE = "    ROE_TTM"
 
 TOTAL_DEBT = "    Total Debt"
 SHORT_DEBT = "    Bank Overdrafts And Short-Term Borrowings From Financial Institutions"

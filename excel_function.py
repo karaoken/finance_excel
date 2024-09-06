@@ -336,3 +336,14 @@ def restore_comments(comments: dict, sheet: worksheet):
         col = get_col_num_of(value=key[0], sheet=sheet, row=1)
         row = get_row_num_of(value=key[1], sheet=sheet, col=1)
         sheet.cell(row=row, column=col).comment = comments[key]
+
+
+def calculate_ttm(numbers: list) -> list:
+    if len(numbers) < 4:
+        return []
+
+    result = []
+    for i in range(len(numbers) - 3):
+        result.append(sum(numbers[i: i+4]))
+
+    return result
