@@ -191,6 +191,7 @@ if conso_available:
     insert_list_to_excel_range(row=sga_row, sheet=pl_conso_sheet, items=gross_profit, title=GROSS_PROFIT,
                                num_format=NUMBER)
 
+    # Total debt @last row
     last_row = get_last_row(sheet=pl_conso_sheet, col=1)
     insert_list_to_excel_range(row=last_row + 1, sheet=pl_conso_sheet, items=total_debt, title=TOTAL_DEBT,
                                num_format=NUMBER)
@@ -300,6 +301,7 @@ if company_available:
     insert_list_to_excel_range(row=sga_row, sheet=pl_comp_sheet, items=gross_profit, title=GROSS_PROFIT,
                                num_format=NUMBER)
 
+    # Total debt @last row
     last_row = get_last_row(sheet=pl_comp_sheet, col=1)
     insert_list_to_excel_range(row=last_row + 1, sheet=pl_comp_sheet, items=total_debt, title=TOTAL_DEBT,
                                num_format=NUMBER)
