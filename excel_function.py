@@ -123,7 +123,7 @@ def change_number_format(sheet: worksheet):
                 sheet.cell(row=row, column=col).value = ""
                 continue
             sheet.cell(row=row, column=col).value = value / 1000
-            sheet.cell(row=row, column=col).number_format = '#,##0.00'
+            sheet.cell(row=row, column=col).number_format = '#,##0'
 
 
 def add_selling_to_sales(sheet):
