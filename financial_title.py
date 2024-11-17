@@ -29,5 +29,5 @@ SHORT_BORROWING = "    Short-Term Borrowings"
 LONG_DEBT_CURRENT = "    Current Portion Of Long-Term Debts"
 LONG_DEBT = "    Non-Current Portion Of Long-Term Debts"
 
-PERCENT_FORMAT = '0.00%'
-NUMBER = '#,##0.00'
+PERCENT_FORMAT = '0.0%'
+NUMBER = '#,##0'
